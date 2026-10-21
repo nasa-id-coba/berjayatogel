@@ -12,21 +12,29 @@
 <body>
     <div class="loader"></div>
     <p>Sedang mengalihkan...</p>
+
     <script>
         const path = window.location.pathname;
         const parts = path.split('/');
         const code = parts[parts.length - 1].toLowerCase();
-        
-        // PERBAIKAN: Menggunakan alamat absolut '/masuk/links.json'
-        fetch('/masuk/links.json').then(response => response.json()).then(data => {
-            if (data[code]) {
-                window.location.href = data[code];
-            } else {
-                document.body.innerHTML = '<h1>❌ 404</h1><p>Kode <b>' + code + '</b> tidak ditemukan.</p>';
-            }
-        }).catch(error => {
-            document.body.innerHTML = '<h1>⚠️ Error</h1><p>Gagal memuat data link.</p>';
-        });
+        const repoName = 'login';
+
+        if (!code || code === repoName || code === '') {
+            document.body.innerHTML = '<h1>🔗 Shortlink Service</h1><p>Silakan tambahkan kode link di akhir URL.</p>';
+        } else {
+            fetch('links.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data[code]) {
+                        window.location.href = data[code];
+                    } else {
+                        document.body.innerHTML = '<h1>❌ 404</h1><p>Kode <b>' + code + '</b> tidak ditemukan.</p>';
+                    }
+                })
+                .catch(error => {
+                    document.body.innerHTML = '<h1>️ Error</h1><p>Gagal memuat data link.</p>';
+                });
+        }
     </script>
 </body>
 </html>
